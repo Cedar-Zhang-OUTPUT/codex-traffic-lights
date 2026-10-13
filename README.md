@@ -1,4 +1,6 @@
-# Codex Light
+# Codex Traffic Lights
+
+[下载 macOS 应用](https://github.com/Cedar-Zhang-OUTPUT/codex-traffic-lights/releases/latest) · [Agent 使用说明](AGENTS.md) · [MIT License](LICENSE)
 
 一个简单的 macOS 26 原生 Codex 状态灯。高对比度深色外壳与高亮灯珠，竖排三灯从上到下为绿、黄、红，只点亮当前状态对应的灯。黄色呼吸时保持明亮，避免变得难以辨认。
 
@@ -7,7 +9,42 @@
 - 红色常亮：明确等待权限、等待回答或结构化工具错误。
 - 多会话优先级：红 > 黄 > 绿。拖动移动位置，右键或菜单栏圆点打开菜单。
 
-## 使用
+## 安装与启动
+
+支持 macOS 26，预编译包适用于 Apple Silicon（arm64）。本应用是菜单栏常驻应用，桌面显示悬浮红绿灯，不显示在 Dock 中。
+
+### 给 agent 的最快安装方式
+
+需要 Xcode 的 Swift 6 工具链，无第三方依赖：
+
+```sh
+git clone https://github.com/Cedar-Zhang-OUTPUT/codex-traffic-lights.git
+cd codex-traffic-lights
+swift test
+./script/build_and_run.sh --install
+```
+
+这会构建应用、安装到 `/Applications/Codex Light.app`、合并安装 Codex Hooks 并启动。已有 Hooks 和其他配置保留，修改前自动备份。不需要 API Key 或其他账号。
+
+### 使用预编译包
+
+从 [Releases](https://github.com/Cedar-Zhang-OUTPUT/codex-traffic-lights/releases/latest) 下载 `Codex-Light-macOS.zip`，解压后把 `Codex Light.app` 放到「应用程序」。打开应用，从菜单栏圆点或红绿灯右键菜单选择「安装／更新 Codex Hooks…」。
+
+自动化安装可以在工作目录中执行：
+
+```sh
+curl -fL https://github.com/Cedar-Zhang-OUTPUT/codex-traffic-lights/releases/latest/download/Codex-Light-macOS.zip -o Codex-Light-macOS.zip
+curl -fL https://github.com/Cedar-Zhang-OUTPUT/codex-traffic-lights/releases/latest/download/SHA256SUMS.txt -o SHA256SUMS.txt
+shasum -a 256 -c SHA256SUMS.txt
+ditto -x -k Codex-Light-macOS.zip .
+ditto 'Codex Light.app' '/Applications/Codex Light.app'
+'/Applications/Codex Light.app/Contents/MacOS/CodexLight' --install-hooks
+open '/Applications/Codex Light.app'
+```
+
+预编译包使用本地签名，尚未经过 Apple 公证。如果 macOS 阻止打开，建议从源码构建。
+
+## 首次使用
 
 打开 `/Applications/Codex Light.app`。Hooks 已由安装流程写入 Codex 的 `hooks.json`；请在新对话顶部检查并信任，已打开的客户端可能需要重启。CLI 可以用 `/hooks` 检查。不自动写入信任设置。
 
@@ -35,3 +72,7 @@ swift test
 Hooks 的执行程序独立保存在 `~/Library/Application Support/Codex Light/bin/CodexLightHook`，因此把 UI 应用移到废纸篓不会造成旧会话脚本缺失。卸载时先从 Codex `hooks.json` 移除包含 `--codex-light-hook` 的处理器；等旧会话全部结束、客户端重启后，再清理该程序与状态目录。其他 Hooks 和配置应保留。配置备份以 `hooks.before-codex-light-` 开头，保存在 Codex 配置目录内。
 
 官方事件参考：[Codex Hooks](https://learn.chatgpt.com/docs/hooks)。
+
+## License
+
+MIT。允许其他 agent 和开发者使用、修改和分发。
