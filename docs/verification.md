@@ -6,3 +6,5 @@
 - Installed helper returned exit 0 and `{}` for synthetic payloads. Two-session integration verified red priority and recovery to yellow while another session remains running.
 - Independent review found ID-less approval correlation, compaction transitions and unbounded locks. All three received failing regression tests and verified fixes.
 - User clicked Trust. A real event from the current Codex conversation then created a running session record; CUA confirmed the installed traffic light changed to yellow. Trust was performed by the user, not by the app or implementation agent.
+
+- Contrast update: release build passed; installed app relaunched. CUA verified opaque dark housing, enlarged 34pt lenses, bright yellow operation and red attention states. Hooks/helper and state logic were unchanged; preview session removed.
